@@ -2,7 +2,6 @@ import { useState } from "react";
 import "../style/User.css";
 function User() {
   const [userPick, setUserPick] = useState({});
-  const [note, setNote] = useState("");
 
   function handelUserPik(day, shift) {
     setUserPick((prevUserPick) => {
@@ -21,8 +20,6 @@ function User() {
       return newUserPick;
     });
   }
-
-  console.log(userPick);
 
   const calnder = [
     {
@@ -86,8 +83,8 @@ function User() {
           </div>
         ))}
       </div>
-      <div className="note">
-        <input placeholder="Add a Note" />
+      <div className="submit">
+        <button onClick={() => console.log(userPick)}>Submit</button>
       </div>
     </div>
   );
