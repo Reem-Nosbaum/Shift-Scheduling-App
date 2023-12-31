@@ -1,0 +1,33 @@
+.table {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.shift {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #555654;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.shift:hover {
+  background-color: rgb(198, 255, 177);
+  color: black;
+}

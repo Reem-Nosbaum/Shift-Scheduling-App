@@ -1,31 +1,61 @@
-import "../style/user.css";
+import "../style/User.css";
 
-const shifts = [
+const calnder = [
   {
-    Sunday: ["morning", "evening", "night"],
+    id: 1,
+    day: "Sunday",
+    shifts: ["morning", "evening", "night"],
   },
   {
-    Monday: ["morning", "evening", "night"],
+    id: 2,
+    day: "Monday",
+    shifts: ["morning", "evening", "night"],
   },
   {
-    Tuesday: ["morning", "evening", "night"],
+    id: 3,
+    day: "Tuesday",
+    shifts: ["morning", "evening", "night"],
   },
   {
-    Wednesday: ["morning", "evening", "night"],
+    id: 4,
+    day: "Wednesday",
+    shifts: ["morning", "evening", "night"],
   },
   {
-    Thursday: ["morning", "evening", "night"],
+    id: 5,
+    day: "Thursday",
+    shifts: ["morning", "evening", "night"],
   },
   {
-    Friday: ["morning", "evening", "night"],
+    id: 6,
+    day: "Friday",
+    shifts: ["morning", "evening", "night"],
   },
   {
-    Saturday: ["morning", "evening", "night"],
+    id: 7,
+    day: "Saturday",
+    shifts: ["morning", "evening", "night"],
   },
 ];
-console.log(shifts[0]);
 function User() {
-  return <div></div>;
+  return (
+    <div>
+      <div className="table">
+        {calnder.map((days) => (
+          <div key={days.id} className="day">
+            <h1>{days.day}</h1>
+            <div>
+              {days.shifts.map((shift, index) => (
+                <div key={index} className="shift">
+                  <h2>{shift}</h2>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default User;
