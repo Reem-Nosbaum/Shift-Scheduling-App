@@ -61,6 +61,9 @@ function User() {
 
   return (
     <div>
+      <h1 className="title">
+        Hi user!, please pick your preference for the next week
+      </h1>
       <div className="table">
         {calnder.map((days) => (
           <div key={days.id} className="day">

@@ -52,3 +52,9 @@ button {
 button:hover {
   background-color: rgb(60, 185, 62);
 }
+
+.title {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
