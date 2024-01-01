@@ -17,6 +17,23 @@ const pool = new Pool({
 
 app.use(express.json());
 
+app.get("/user/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ error: "User not found" });
+    } else {
+      res.json(result.rows[0]);
+    }
+  } catch (error) {
+    console.error("Error getting user details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -26,9 +43,16 @@ app.post("/login", async (req, res) => {
       [username, password]
     );
 
-    if (result.rows.length > 0) {
-      res.json({ message: "Login successful" });
+    if (result.rows.length === 1) {
+      // User found, send back user information
+      const user = result.rows[0];
+      res.json({
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      });
     } else {
+      // User not found or invalid credentials
       res.status(401).json({ error: "Invalid credentials" });
     }
   } catch (error) {

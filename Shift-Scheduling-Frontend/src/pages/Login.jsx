@@ -18,10 +18,10 @@ function Login() {
       });
 
       if (response.ok) {
-        // Handle successful login (e.g., redirect to another page)
+        const user = await response.json();
         console.log("Login successful");
+        console.log("User details:", user);
       } else {
-        // Handle unsuccessful login
         console.error("Login failed");
       }
     } catch (error) {
