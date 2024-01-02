@@ -33,11 +33,10 @@ function Login() {
     <div className="body">
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="userId">Username</label>
+          <label>Username</label>
           <input
             type="text"
             className="form-control"
-            id="userId"
             placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}

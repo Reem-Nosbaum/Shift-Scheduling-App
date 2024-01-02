@@ -1,6 +1,7 @@
 const express = require("express");
 const { Pool } = require("pg");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 const port = 3000;
@@ -8,11 +9,11 @@ const port = 3000;
 app.use(cors());
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "ShiftDB",
-  password: "1234",
-  port: 5432,
+  user: process.env.DATABASE_USER,
+  host: process.env.DATABASE_HOST,
+  database: process.env.DATABASE_NAME,
+  password: process.env.DATABASE_PASSWORD,
+  port: process.env.DATABASE_PORT,
 });
 
 app.use(express.json());
