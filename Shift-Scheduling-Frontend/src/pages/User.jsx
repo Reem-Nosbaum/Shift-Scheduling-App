@@ -87,7 +87,9 @@ function User() {
         ))}
       </div>
       <div className="submit">
-        <button onClick={() => console.log(userPick)}>Submit</button>
+        <button className="submit-button" onClick={() => console.log(userPick)}>
+          Submit
+        </button>
       </div>
     </div>
   );
