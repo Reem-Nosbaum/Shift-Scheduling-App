@@ -1,32 +1,72 @@
-.btn-primary {
-  width: 100px;
-  height: 100px;
+.mainContainer {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  height: 100vh;
 }
 
-.form-group {
+.titleContainer {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  justify-content: center;
-}
-.body {
-  display: flex;
-  justify-content: center;
+  font-size: 64px;
+  font-weight: bolder;
   align-items: center;
-}
-form {
-  background-color: #242424;
-  color: aliceblue;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  padding-top: 50px;
-  padding-bottom: 20px;
 }
 
-input {
-  width: 150px;
-  height: 25px;
+.resultContainer,
+.historyItem {
+  flex-direction: row;
+  display: flex;
+  width: 400px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.historyContainer {
+  flex-direction: column;
+  display: flex;
+  height: 200px;
+  align-items: center;
+  flex-grow: 5;
+  justify-content: flex-start;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.inputContainer > .errorLabel {
+  color: red;
+  font-size: 12px;
+}
+.inputButton {
+  width: 200px;
+  height: 50px;
+  cursor: pointer;
+  font-size: large;
+}
+
+:hover.inputButton {
+  background: #55ff6b;
+  color: #000;
+}
+.inputBox {
+  height: 48px;
+  width: 400px;
+  font-size: large;
+  border-radius: 8px;
+  border: 1px solid grey;
+  padding-left: 8px;
 }
