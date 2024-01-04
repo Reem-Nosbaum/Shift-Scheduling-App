@@ -1,6 +1,13 @@
 from app import app, db
 from app.models import User, Schedule
-from flask import jsonify, request
+from flask import jsonify, request, session,make_response
+from dotenv import load_dotenv
+import os
+from flask_jwt_extended import create_access_token
+
+load_dotenv()
+
+app.secret_key = os.getenv('SECRET_KEY')
 
 
 # GET route to retrieve user and schedule information
@@ -32,18 +39,24 @@ def login():
     try:
         data = request.get_json()
 
-        # Retrieve user from the database based on the provided username
         user = User.query.filter_by(username=data['username']).first()
 
         if user and user.password == data['password']:
-            # Authentication successful
+            session['user_id'] = user.id
             return jsonify({'message': 'Login successful'}), 200
         else:
             # Authentication failed
             return jsonify({'error': 'Invalid username or password'}), 401
-
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route("/logout", methods=['POST'])
+def logout():
+    if 'user_id' in session:
+        session.pop('user_id')
+        return make_response(jsonify({'task': 'logout', 'status': 'success'}), 200)
+    return make_response(jsonify({'task': 'logout', 'status': 'failed'}), 401)
+
 
 
 # POST route to create a new user
