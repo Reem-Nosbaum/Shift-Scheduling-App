@@ -34,6 +34,7 @@ def get_user_and_schedule(user_id):
         return jsonify({'error': str(e)}), 500
 
 
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -43,7 +44,14 @@ def login():
 
         if user and user.password == data['password']:
             session['user_id'] = user.id
-            return jsonify({'message': 'Login successful'}), 200
+            session['user_role'] = user.role
+
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'role': user.role,
+            }
+            return jsonify({'message': 'Login successful', 'user': user_data}), 200
         else:
             # Authentication failed
             return jsonify({'error': 'Invalid username or password'}), 401
@@ -96,5 +104,30 @@ def create_schedule():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
 
+@app.route('/admin', methods=['GET'])
+def admin_route():
+    userRole = session["user_role"]
+    if userRole != 'admin':
+        return jsonify({'error': 'Unauthorized access'}), 403
+    # Continue with serving the admin content
+    return jsonify({'message': 'Welcome to the admin page!'})
+
+
+@app.route('/user', methods=['GET'])
+def user_route():
+    userRole = session["user_role"]
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    user_data = {
+        'id': user.id,
+        'username': user.username,
+        'role': user.role,
+        }
+
+    if userRole != 'user':
+        return jsonify({'error': 'Unauthorized access'}), 403
+    # Continue with serving the admin content
+    return jsonify({'message': 'Welcome to the user page!' ,'user' : user_data})
 
