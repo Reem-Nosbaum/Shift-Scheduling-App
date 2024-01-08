@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../style/Login.css";
 
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -10,7 +10,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onButtonClick = async () => {
     try {
@@ -45,11 +45,20 @@ const Login = () => {
       if (!response.ok) {
         throw new Error("Authentication failed");
       }
+      const data = await response.json();
+
+      // Extract the token from the response
+      const accessToken = data.access_token;
+
+      // Store the token in localStorage or sessionStorage
+      // You can use localStorage for a persistent token or sessionStorage for a session-based token
+      localStorage.setItem("accessToken", accessToken);
 
       // Successful authentication, navigate to "/"
-      navigate("/");
+      console.log("Authentication successful");
     } catch (error) {
       // Handle authentication error
+      console.error("Authentication error:", error);
       setLoginError("Invalid username or password");
     }
   };

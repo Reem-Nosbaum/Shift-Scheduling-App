@@ -2,13 +2,65 @@ from app import app, db
 from app.models import User, Schedule
 from flask import jsonify, request, session,make_response
 from dotenv import load_dotenv
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager
+
 import os
-from flask_jwt_extended import create_access_token
 
 load_dotenv()
 
 app.secret_key = os.getenv('SECRET_KEY')
 
+jwt = JWTManager(app) 
+
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.get_json()
+
+        user = User.query.filter_by(username=data['username']).first()
+
+        if user and user.password == data['password']:
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'role': user.role,
+            }
+            access_token = create_access_token(identity=user_data)
+            return jsonify(access_token=access_token), 200
+        else:
+            # Authentication failed
+            return jsonify({'error': 'Invalid username or password'}), 401
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# Protected route for admin
+@app.route('/admin', methods=['GET'])
+@jwt_required()
+def admin_route():
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'admin':
+        return jsonify({'error': 'Unauthorized access'}), 403
+    # Continue with serving the admin content
+    return jsonify({'message': 'Welcome to the admin page!'})
+
+
+# Protected route for user
+@app.route('/user', methods=['GET'])
+@jwt_required()
+def user_route():
+    current_user = get_jwt_identity()
+    user_data = {
+        'id': current_user['id'],
+        'username': current_user['username'],
+        'role': current_user['role'],
+    }
+
+    if current_user['role'] != 'user':
+        return jsonify({'error': 'Unauthorized access'}), 403
+    # Continue with serving the user content
+    return jsonify({'message': 'Welcome to the user page!', 'user': user_data})
 
 # GET route to retrieve user and schedule information
 @app.route('/users/<int:user_id>', methods=['GET'])
@@ -34,29 +86,6 @@ def get_user_and_schedule(user_id):
         return jsonify({'error': str(e)}), 500
 
 
-
-@app.route('/login', methods=['POST'])
-def login():
-    try:
-        data = request.get_json()
-
-        user = User.query.filter_by(username=data['username']).first()
-
-        if user and user.password == data['password']:
-            session['user_id'] = user.id
-            session['user_role'] = user.role
-
-            user_data = {
-                'id': user.id,
-                'username': user.username,
-                'role': user.role,
-            }
-            return jsonify({'message': 'Login successful', 'user': user_data}), 200
-        else:
-            # Authentication failed
-            return jsonify({'error': 'Invalid username or password'}), 401
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 @app.route("/logout", methods=['POST'])
 def logout():
@@ -105,29 +134,4 @@ def create_schedule():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-
-@app.route('/admin', methods=['GET'])
-def admin_route():
-    userRole = session["user_role"]
-    if userRole != 'admin':
-        return jsonify({'error': 'Unauthorized access'}), 403
-    # Continue with serving the admin content
-    return jsonify({'message': 'Welcome to the admin page!'})
-
-
-@app.route('/user', methods=['GET'])
-def user_route():
-    userRole = session["user_role"]
-    user_id = session['user_id']
-    user = User.query.get(user_id)
-    user_data = {
-        'id': user.id,
-        'username': user.username,
-        'role': user.role,
-        }
-
-    if userRole != 'user':
-        return jsonify({'error': 'Unauthorized access'}), 403
-    # Continue with serving the admin content
-    return jsonify({'message': 'Welcome to the user page!' ,'user' : user_data})
 
